@@ -33,7 +33,7 @@ def save_state():
     with open('data.yml', 'w') as f:
         f.write(yaml.dump(data, default_flow_style=False))
 
-def add_feed(name, url, interval=60, filter=None, selector=None, key=None, start_date=None):
+def add_feed(name, url, interval=3600, filter=None, selector=None, key=None, start_date=None):
     if key is None:
         key = name
 
@@ -43,7 +43,7 @@ def add_feed(name, url, interval=60, filter=None, selector=None, key=None, start
         feed = { 'name'    : name,
                  'url'     : url,
                  'id'      : None,
-                 'interval': 3600,
+                 'interval': interval,
                  'lastItemDate': time.time() if start_date is None else start_date
                }
         data['feeds'][key] = feed
