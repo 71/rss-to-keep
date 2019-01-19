@@ -68,7 +68,13 @@ def sync_feed(feed, filter, selector):
     min_date = feed['lastItemDate']
 
     for entry in rss.entries:
-        entry_date = time.mktime(entry.published_parsed)
+        if 'published_parsed' in entry:
+            entry_date = time.mktime(entry.published_parsed)
+        elif 'updated_parsed' in entry:
+            entry_date = time.mktime(entry.updated_parsed)
+        else:
+            print('[-] Invalid feed item in', feed['name'], '; skipping feed.')
+            break
 
         if entry_date <= min_date or not filter(entry):
             continue
