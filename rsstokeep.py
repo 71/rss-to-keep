@@ -60,7 +60,7 @@ def sync_feed(feed, filter, selector):
 
     try:
         rss = feedparser.parse(feed['url'])
-    except e:
+    except:
         print('[-] Could not sync feed', feed['name'], '; will retry later.')
         return
 
@@ -111,7 +111,7 @@ def sync_feed(feed, filter, selector):
     try:
         keep.sync()
         print('[+] Added', added, 'feed item(s) from', feed['name'], 'to Keep.')
-    except e:
+    except:
         print('[-] Could not sync changes to Keep ; will retry later.')
 
     save_state()
