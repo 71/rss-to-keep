@@ -1,4 +1,4 @@
-import gkeepapi, os, time, yaml
+import gkeepapi, os, time, traceback, yaml
 
 
 # Load Google Keep and saved data
@@ -62,7 +62,10 @@ def sync_feed(feed, filter, selector):
         rss = feedparser.parse(feed['url'])
     except:
         print('[-] Could not sync feed', feed['name'], '; will retry later.')
+        traceback.print_exc()
         return
+
+    print('[i] Syncing feed ', feed['name'], '...', sep='')
 
     added = 0
     min_date = feed['lastItemDate']
@@ -113,6 +116,7 @@ def sync_feed(feed, filter, selector):
         print('[+] Added', added, 'feed item(s) from', feed['name'], 'to Keep.')
     except:
         print('[-] Could not sync changes to Keep ; will retry later.')
+        traceback.print_exc()
 
     save_state()
 
@@ -120,7 +124,7 @@ def run(now=True):
     import schedule, signal, sys
 
     for feed, filter, selector in feeds:
-        def run_job():
+        def run_job(feed=feed, filter=filter, selector=selector):
             sync_feed(feed, filter, selector)
 
         schedule.every(feed['interval']).seconds.do(run_job)
